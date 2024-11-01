@@ -2,7 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Article;
+use App\Models\Category;
+use App\Models\Course;
+use App\Models\PopularArticle;
 use App\Models\User;
+use App\Models\Writer;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        Category::factory(4)->has(
+            Course::factory(3)->has(
+                Article::factory(5)->for(Writer::factory())
+            )
+        )->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Optional: Seed popular articles
+        PopularArticle::factory(6)->create();
     }
 }
