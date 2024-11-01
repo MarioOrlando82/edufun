@@ -13,18 +13,64 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+
     public function run(): void
     {
-        Category::factory(4)->has(
-            Course::factory(3)->has(
-                Article::factory(5)->for(Writer::factory())
-            )
-        )->create();
+        $dataScience = Category::create(['name' => 'Data Science']);
+        $machineLearning = Course::create(['name' => 'Machine Learning', 'category_id' => $dataScience->id]);
+        $deepLearning = Course::create(['name' => 'Deep Learning', 'category_id' => $dataScience->id]);
+        $nlp = Course::create(['name' => 'Natural Language Processing', 'category_id' => $dataScience->id]);
 
-        // Optional: Seed popular articles
-        PopularArticle::factory(6)->create();
+        $networkSecurity = Category::create(['name' => 'Network Security']);
+        $softwareSecurity = Course::create(['name' => 'Software Security', 'category_id' => $networkSecurity->id]);
+        $networkAdmin = Course::create(['name' => 'Network Administration', 'category_id' => $networkSecurity->id]);
+        $networkTech = Course::create(['name' => 'Popular Network Technology', 'category_id' => $networkSecurity->id]);
+
+        $writer1 = Writer::factory()->create(['name' => 'Raka Putra Wicaksono']);
+        $writer2 = Writer::factory()->create(['name' => 'Bia Mecca Annisa']);
+        $writer3 = Writer::factory()->create(['name' => 'Abi Firmansyah']);
+
+        Article::factory()->create([
+            'course_id' => $machineLearning->id,
+            'writer_id' => $writer1->id,
+            'title' => $machineLearning->name
+        ]);
+
+        Article::factory()->create([
+            'course_id' => $deepLearning->id,
+            'writer_id' => $writer2->id,
+            'title' => $deepLearning->name
+        ]);
+
+        Article::factory()->create([
+            'course_id' => $nlp->id,
+            'writer_id' => $writer3->id,
+            'title' => $nlp->name
+        ]);
+
+        Article::factory()->create([
+            'course_id' => $softwareSecurity->id,
+            'writer_id' => $writer1->id,
+            'title' => $softwareSecurity->name
+        ]);
+
+        Article::factory()->create([
+            'course_id' => $networkAdmin->id,
+            'writer_id' => $writer2->id,
+            'title' => $networkAdmin->name
+        ]);
+
+        Article::factory()->create([
+            'course_id' => $networkTech->id,
+            'writer_id' => $writer3->id,
+            'title' => $networkTech->name
+        ]);
+
+        foreach (Article::all() as $article) {
+            PopularArticle::create([
+                'article_id' => $article->id,
+                'views' => rand(1000, 10000)
+            ]);
+        }
     }
 }
